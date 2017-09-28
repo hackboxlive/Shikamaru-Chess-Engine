@@ -84,14 +84,6 @@ class board_generation	{
 				{ " " , " " , " " , " " , " " , " " , " " , " " },
 				{ " " , " " , " " , " " , " " , " " , " " , " " },
 				{ "R" , "N" , "B" , "Q" , "K" , "B" , "N" , "R" }
-				// { "r" , "n" , "b" , "q" , "k" , "b" , "n" , "r" },
-				// { "p" , "p" , "p" , "p" , "p" , "p" , "p" , "p" },
-				// { " " , " " , " " , " " , " " , " " , " " , " " },
-				// { " " , " " , " " , " " , " " , " " , " " , " " },
-				// { " " , " " , " " , " " , " " , " " , " " , " " },
-				// { "p" , "p" , "p" , "p" , "p" , "p" , "p" , "p" },
-				// { "P" , "P" , "P" , "P" , "P" , "P" , "P" , "P" },
-				// { "R" , "N" , "B" , "Q" , "K" , "B" , "N" , "R" }
 			};
 			chessboard_to_bitboards(chess_board);
 		}
@@ -119,7 +111,6 @@ class board_generation	{
 			while(b1 % 2 == b2 % 2)	{
 				b2 = rand() % 8;
 			}
-			// printf("%d %d\n",b1,b2);
 			chess_board[0][b2] = "b";
 			chess_board[7][b2] = "B";
 
@@ -188,13 +179,3 @@ class board_generation	{
 		}
 
 };
-
-//for testing purpose, we will use main here
-
-/*
-int main()	{
-	board_generation::initiate_standard_chess();
-	board_generation::initiate_chess960();
-	return 0;
-}	
-*/
