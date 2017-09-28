@@ -4,6 +4,20 @@
 class board_generation	{
 	
 	public:
+		static long long WP;
+		static long long WN;
+		static long long WB;
+		static long long WR;
+		static long long WQ;
+		static long long WK;
+		static long long BP;
+		static long long BN;
+		static long long BB;
+		static long long BR;
+		static long long BQ;
+		static long long BK;
+
+	public:
 		static long long convert_string_to_decimal(std::string binary)	{
 			long long two = 1;
 			for(int i = 0 ; binary[i] != '1'; i++)	{
@@ -12,11 +26,11 @@ class board_generation	{
 			return two;
 		}
 
-		static void chessboard_to_bitboards(std::string chess_board[8][8], long long WR, long long WN, long long WB, long long WQ, long long WK, long long WP, long long BP, long long BN, long long BB, long long BR, long long BQ, long long BK)	{
+		static void chessboard_to_bitboards(std::string chess_board[8][8])	{
 			std::string binary;
 			for( int i = 0 ; i < 64 ; i++ )	{
 				binary = "0000000000000000000000000000000000000000000000000000000000000000";
-				binary[63 - i] = '1';
+				binary[i] = '1';
 				char ch = chess_board[i / 8][i % 8][0];
 				if(ch == 'r')	{
 					BR += convert_string_to_decimal(binary);
@@ -51,53 +65,38 @@ class board_generation	{
 				else if(ch == 'K')	{
 					WK += convert_string_to_decimal(binary);
 				}
-				else	{
+				else if(ch == 'P')	{
 					WP += convert_string_to_decimal(binary);
 				}
 			}
 		}
 
 		static void initiate_standard_chess()	{
-			long long WP = 0;
-			long long WN = 0;
-			long long WB = 0;
-			long long WR = 0;
-			long long WQ = 0;
-			long long WK = 0;
-			long long BP = 0;
-			long long BN = 0;
-			long long BB = 0;
-			long long BR = 0;
-			long long BQ = 0;
-			long long BK = 0;
+			WP = 0; WN = 0; WB = 0; WR = 0; WQ = 0; WK = 0; BP = 0; BN = 0; BB = 0; BR = 0; BQ = 0; BK = 0;
 			//the start state of chess; we could have directly initialized the variables,
 			//but for testing purpose we need this strig matrix
 			std::string chess_board[8][8] = {
 				{ "r" , "n" , "b" , "q" , "k" , "b" , "n" , "r" },
-				{ "p" , "p" , "p" , "p" , "p" , "p" , "p" , "p" },
+				{ "p" , "p" , "p" , "P" , "p" , "p" , "p" , "p" },
 				{ " " , " " , " " , " " , " " , " " , " " , " " },
 				{ " " , " " , " " , " " , " " , " " , " " , " " },
 				{ " " , " " , " " , " " , " " , " " , " " , " " },
 				{ " " , " " , " " , " " , " " , " " , " " , " " },
-				{ "P" , "P" , "P" , "P" , "P" , "P" , "P" , "P" },
+				{ " " , " " , " " , " " , " " , " " , " " , " " },
 				{ "R" , "N" , "B" , "Q" , "K" , "B" , "N" , "R" }
+				// { "r" , "n" , "b" , "q" , "k" , "b" , "n" , "r" },
+				// { "p" , "p" , "p" , "p" , "p" , "p" , "p" , "p" },
+				// { " " , " " , " " , " " , " " , " " , " " , " " },
+				// { " " , " " , " " , " " , " " , " " , " " , " " },
+				// { " " , " " , " " , " " , " " , " " , " " , " " },
+				// { "p" , "p" , "p" , "p" , "p" , "p" , "p" , "p" },
+				// { "P" , "P" , "P" , "P" , "P" , "P" , "P" , "P" },
+				// { "R" , "N" , "B" , "Q" , "K" , "B" , "N" , "R" }
 			};
-			chessboard_to_bitboards(chess_board, WR, WN, WB, WQ, WK, WP, BP, BN, BB, BR, BQ, BK);
+			chessboard_to_bitboards(chess_board);
 		}
 		
 		static void initiate_chess960()	{
-			long long WP = 0;
-			long long WN = 0;
-			long long WB = 0;
-			long long WR = 0;
-			long long WQ = 0;
-			long long WK = 0;
-			long long BP = 0;
-			long long BN = 0;
-			long long BB = 0;
-			long long BR = 0;
-			long long BQ = 0;
-			long long BK = 0;
 			std::string chess_board[8][8] = {
 				{ " " , " " , " " , " " , " " , " " , " " , " " },
 				{ "p" , "p" , "p" , "p" , "p" , "p" , "p" , "p" },
@@ -136,23 +135,23 @@ class board_generation	{
 			int n = rand() % 5;
 			for(int i = 0 ; i < 8 ; i++)	{
 				if(chess_board[0][i][0] == ' ')	{
+					if(n == 0)	{
+						chess_board[0][i] = "n";
+						chess_board[7][i] = "N";
+						break;
+					}
 					n--;
-				}
-				if(n == 0)	{
-					chess_board[0][i] = "n";
-					chess_board[7][i] = "N";
-					break;
 				}
 			}
 			n = rand() % 4;
 			for(int i = 0 ; i < 8 ; i++)	{
 				if(chess_board[0][i][0] == ' ')	{
+					if(n == 0)	{
+						chess_board[0][i] = "n";
+						chess_board[7][i] = "N";
+						break;
+					}
 					n--;
-				}
-				if(n == 0)	{
-					chess_board[0][i] = "n";
-					chess_board[7][i] = "N";
-					break;
 				}
 			}
 
@@ -178,13 +177,13 @@ class board_generation	{
 					}
 				}
 			}
-			for(int i=0;i<8;i++)	{
+/*			for(int i=0;i<8;i++)	{
 				for(int j=0;j<8;j++)	{
 					printf("%c ",chess_board[i][j][0]);
 				}
 				printf("\n");
 			}
-			chessboard_to_bitboards(chess_board, WR, WN, WB, WQ, WK, WP, BP, BN, BB, BR, BQ, BK);
+*/			chessboard_to_bitboards(chess_board);
 	
 		}
 
@@ -195,7 +194,7 @@ class board_generation	{
 /*
 int main()	{
 	board_generation::initiate_standard_chess();
-//	board_generation::initiate_chess960();
+	board_generation::initiate_chess960();
 	return 0;
 }	
 */
