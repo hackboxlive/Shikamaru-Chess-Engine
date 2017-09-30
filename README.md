@@ -34,5 +34,7 @@ Some implementation details:
 The bits are counted from the top-left corner to the bottom-right corner in that order.
 
 The moves.hpp file consists of all the move generation code of the chess-engine. Tricks used here:
-	- Some basic bit manipulation
-	- Hyperbola Quintessence which applies to the o^(o-2r) trick
+	- Some basic bit manipulation for pawn movements
+	- Hyperbola Quintessence which applies to the o^(o-2r) trick for bishop, rook and queen movements
+	- Added moves for king and knight using sliding constant mask values
+	- Added king danger detection from opponent's peice

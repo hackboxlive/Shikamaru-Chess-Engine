@@ -25,7 +25,7 @@ class moves	{
 					chess_[i/8][i%8]="P";
 				}
 				else	{
-					chess_[i/8][i%8]="s";
+					chess_[i/8][i%8]=".";
 				}
 			}
 			for(int i=0;i<8;i++)	{
@@ -267,12 +267,75 @@ class moves	{
 			return list;
 		}
 
+		static long long unsafe_for_black(long long WP, long long WN, long long WB, long long WR, long long WQ, long long WK, long long BP, long long BN, long long BB, long long BR, long long BQ, long long BK)	{
+			long long unsafe;
+			occupied = BP | BN | BB | BR | BQ | BK | WP | WN | WB | WR | WQ | WK;
+			//unsafe positions from white pawns
+			unsafe = (WP >> 7) & ~file_a;	//rigt pawn capture
+			unsafe |= (WP >> 9) & ~file_h;	//left pawn capture
+			//unsafe positions from white knights
+			long long white_move;
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((WN >> i) & 1 == 1)	{
+					if(i > 18)	{
+						white_move = knight_span << (i - 18);
+					}
+					else	{
+						white_move = knight_span >> (18 - i);
+					}
+					if(i % 8 < 4)	{
+						white_move &= ~file_gh;
+					}
+					else	{
+						white_move &= ~file_ab;
+					}
+					unsafe |= white_move;
+				}
+			}
+			//unsafe positions from white bishops/queen diagonal moves
+			long long QB = WB | WQ;
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((QB >> i) & 1 == 1)	{
+					white_move = diagonal_and_antidiagonal_moves(i);
+					unsafe |= white_move;
+				}
+			}
+			//unsafe positions from white rooks/queen straight moves
+			long long QR = WR | WQ;
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((QR >> i) & 1 == 1)	{
+					white_move = horizontal_and_vertical_moves(i);
+					unsafe |= white_move;
+				}
+			}
+			//unsafe positions from white king
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((WK >> i) & 1 == 1)	{
+					if(i > 9)	{
+						white_move = king_span << (i - 9);
+					}
+					else	{
+						white_move = king_span >> (9 - i);
+					}
+					if(i % 8 < 4)	{
+						white_move &= ~file_gh;
+					}
+					else	{
+						white_move &= ~file_ab;
+					}
+					unsafe |= white_move;
+				}
+			}
+			return unsafe;
+		}
+
 		static string possible_moves_white(string history, long long WP, long long WN, long long WB, long long WR, long long WQ, long long WK, long long BP, long long BN, long long BB, long long BR, long long BQ, long long BK)	{
 			not_white_pieces = ~(WP | WN | WB | WR | WQ | WK | BK);
 			black_pieces = BP | BN | BB | BR | BQ;
 			occupied = BP | BN | BB | BR | BQ | BK | WP | WN | WB | WR | WQ | WK;
 			empty = ~occupied;
 			string list = possible_pawn_white(history, WP, BP) + possible_bishop_white(occupied, WB) + possible_rook_white(occupied, WR) + possible_queen_white(occupied, WQ) + possible_knight_white(occupied, WN) + possible_king_white(occupied, WK);
+			unsafe_for_black(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
 			return list;
 		}
 };
