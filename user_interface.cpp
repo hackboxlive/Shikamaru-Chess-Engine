@@ -35,8 +35,8 @@ int main()	{
 	BR = board_generation::BR;
 	BQ = board_generation::BQ;
 	BK = board_generation::BK;
-	cout<<WP<<endl;
-	string list = moves::possible_moves_white("", WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
+//	cout<<WP<<endl;
+	string list = moves::possible_moves_white("1636", WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
 	cout<<list<<endl;
 	return 0;
 }
