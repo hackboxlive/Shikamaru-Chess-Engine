@@ -23,7 +23,7 @@ long long moves::occupied;
 long long moves::not_black_pieces;
 long long moves::white_pieces;
 int main()	{
-	long long WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK;
+	long long WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK, EP;
 	board_generation::initiate_standard_chess();
 	WP = board_generation::WP;
 	WN = board_generation::WN;
@@ -37,9 +37,10 @@ int main()	{
 	BR = board_generation::BR;
 	BQ = board_generation::BQ;
 	BK = board_generation::BK;
+	EP = 0;
 //	cout<<WP<<endl;
-//	string list = moves::possible_moves_white("1636", WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
-	string list = moves::possible_moves_black("6343", WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
+//	string list = moves::possible_moves_white(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK, EP);
+	string list = moves::possible_moves_black(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK, EP);
 	cout<<list<<endl;
 	return 0;
 }

@@ -78,7 +78,7 @@ class moves	{
 			return (possible_antidiagonal | possible_diagonal);
 		}
 
-		static string possible_pawn_white(string history, long long WP, long long BP)	{
+		static string possible_pawn_white(long long WP, long long BP, long long EP)	{
 			string list = "";
 			long long pawn_moves;
 
@@ -139,38 +139,28 @@ class moves	{
 			}
 
 			//en passants moves
-			long long file_mask_h[8] = {
-				72340172838076673, 144680345676153346, 289360691352306692, 578721382704613384, 1157442765409226768, 2314885530818453536, 4629771061636907072, -9187201950435737472
-			};
-			if(history.length() >= 4)	{
-				if(history[history.length() - 1] == history[history.length() - 3] && abs(history[history.length() - 2] - history[history.length() - 4]) == 2)	{
-					int e_file = history[history.length() - 1] - '0';
-					//en passant right
-					long long possibility = (WP << 1) & BP & file_5 & ~file_a & file_mask_h[e_file];	//shows piece to remove, not destination
-					if(possibility != 0)	{
-						int i = 0;
-						while(possibility % 2 == 0)	{
-							i++;
-							possibility /= 2;
-						}
-						list += (to_string(i % 8 - 1) + to_string(i % 8) + "WE");
-					}
-					//en passant left
-					possibility = (WP >> 1) & BP & file_5 & ~file_h & file_mask_h[e_file];	//shows pieces to remove, not destination
-					if(possibility != 0)	{
-						int i = 0;
-						while(possibility & 1 == 1)	{
-							i++;
-							possibility >>= 1;
-						}
-						list += (to_string(i % 8 + 1) + to_string(i % 8) + "WE");
-					}
+			long long possibility = (WP << 1) && BP && file_5 & ~file_a & EP;
+			if(possibility != 0)	{
+				int index = 0;
+				while(possibility & 1 == 1)	{
+					index++;
+					possibility >>= 1;
 				}
+				list += to_string(index % 8 - 1) + to_string(index % 8) + "WE";
+			}
+			possibility = (WP >> 1) && BP && file_5 & ~file_h & EP;
+			if(possibility != 0)	{
+				int index = 0;
+				while(possibility & 1 == 1)	{
+					index++;
+					possibility >>= 1;
+				}
+				list += to_string(index % 8 + 1) + to_string(index % 8) + "WE";
 			}
 			return list;
 		}
 
-		static string possible_pawn_black(string history, long long BP, long long WP)	{
+		static string possible_pawn_black(long long BP, long long WP, long long EP)	{
 			string list = "";
 			long long pawn_moves;
 
@@ -231,33 +221,23 @@ class moves	{
 			}
 
 			//en passants moves
-			long long file_mask_h[8] = {
-				72340172838076673, 144680345676153346, 289360691352306692, 578721382704613384, 1157442765409226768, 2314885530818453536, 4629771061636907072, -9187201950435737472
-			};
-			if(history.length() >= 4)	{
-				if(history[history.length() - 1] == history[history.length() - 3] && abs(history[history.length() - 2] - history[history.length() - 4]) == 2)	{
-					int e_file = history[history.length() - 1] - '0';
-					//en passant right
-					long long possibility = (BP >> 1) & WP & file_4 & ~file_h & file_mask_h[e_file];	//shows piece to remove, not destination
-					if(possibility != 0)	{
-						int i = 0;
-						while(possibility % 2 == 0)	{
-							i++;
-							possibility >>= 1;
-						}
-						list += (to_string(i % 8 + 1) + to_string(i % 8) + "bE");
-					}
-					//en passant left
-					possibility = (BP << 1) & WP & file_4 & ~file_a & file_mask_h[e_file];	//shows pieces to remove, not destination
-					if(possibility != 0)	{
-						int i = 0;
-						while(possibility & 1 == 1)	{
-							i++;
-							possibility >>= 1;
-						}
-						list += (to_string(i % 8 - 1) + to_string(i % 8) + "bE");
-					}
+			long long possibility = (BP >> 1) & WP & file_4 & ~file_h & EP;
+			if(possibility != 0)	{
+				int index = 0;
+				while(possibility & 1 == 1)	{
+					index++;
+					possibility >>= 1;
 				}
+				list += to_string(index % 8 + 1) + to_string(index % 8) + "bE";
+			}
+			possibility = (BP << 1) & WP & file_4 & ~file_a & EP;
+			if(possibility != 0)	{
+				int index = 0;
+				while(possibility & 1 == 1)	{
+					index++;
+					possibility >>= 1;
+				}
+				list += to_string(index % 8 - 1) + to_string(index % 8) + "bE";
 			}
 			return list;
 		}
@@ -340,7 +320,6 @@ class moves	{
 
 		static string possible_queen_black(long long occupied, long long BQ)	{
 			string list = "";
-			cout<<BQ<<endl;
 			for(int i = 0 ; i < 64 ; i++)	{
 				if((BQ >> i) & 1 == 1)	{
 					long long k = diagonal_and_antidiagonal_moves(i) & not_black_pieces;
@@ -587,23 +566,23 @@ class moves	{
 			return unsafe;
 		}
 
-		static string possible_moves_white(string history, long long WP, long long WN, long long WB, long long WR, long long WQ, long long WK, long long BP, long long BN, long long BB, long long BR, long long BQ, long long BK)	{
+		static string possible_moves_white(long long WP, long long WN, long long WB, long long WR, long long WQ, long long WK, long long BP, long long BN, long long BB, long long BR, long long BQ, long long BK, long long EP)	{
 			not_white_pieces = ~(WP | WN | WB | WR | WQ | WK | BK);
 			black_pieces = BP | BN | BB | BR | BQ;
 			occupied = BP | BN | BB | BR | BQ | BK | WP | WN | WB | WR | WQ | WK;
 			empty = ~occupied;
-			string list = possible_pawn_white(history, WP, BP) + possible_bishop_white(occupied, WB) + possible_rook_white(occupied, WR) + possible_queen_white(occupied, WQ) + possible_knight_white(occupied, WN) + possible_king_white(occupied, WK);
+			string list = possible_pawn_white(WP, BP, EP) + possible_bishop_white(occupied, WB) + possible_rook_white(occupied, WR) + possible_queen_white(occupied, WQ) + possible_knight_white(occupied, WN) + possible_king_white(occupied, WK);
 			//unsafe_for_white(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
 			return list;
 		}
 
-		static string possible_moves_black(string history, long long WP, long long WN, long long WB, long long WR, long long WQ, long long WK, long long BP, long long BN, long long BB, long long BR, long long BQ, long long BK)	{
+		static string possible_moves_black(long long WP, long long WN, long long WB, long long WR, long long WQ, long long WK, long long BP, long long BN, long long BB, long long BR, long long BQ, long long BK, long long EP)	{
 			not_black_pieces = ~(BP | BN | BB | BR | BQ | BK | WK);
 			white_pieces = WP | WN | WB | WR | WQ;
 			occupied = BP | BN | BB | BR | BQ | BK | WP | WN | WB | WR | WQ | WK;
 			empty = ~occupied;
-			string list = possible_pawn_black(history, BP, WP) + possible_bishop_black(occupied, BB) + possible_rook_black(occupied, BR) + possible_queen_black(occupied, BQ) + possible_knight_black(occupied, BN) + possible_king_black(occupied, BK);
-//			unsafe_for_black(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
+			string list = possible_pawn_black(BP, WP, EP) + possible_bishop_black(occupied, BB) + possible_rook_black(occupied, BR) + possible_queen_black(occupied, BQ) + possible_knight_black(occupied, BN) + possible_king_black(occupied, BK);
+			//unsafe_for_black(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
 			return list;
 		}
 };
