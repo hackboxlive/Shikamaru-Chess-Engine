@@ -19,6 +19,7 @@ long long board_generation::BK = 0;
 long long moves::not_white_pieces;
 long long moves::black_pieces;
 long long moves::empty;
+long long moves::occupied;
 
 int main()	{
 	long long WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK;
@@ -37,6 +38,6 @@ int main()	{
 	BK = board_generation::BK;
 //	cout<<WP<<endl;
 	string list = moves::possible_moves_white("1636", WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
-	cout<<list<<endl;
+//	cout<<list<<endl;
 	return 0;
 }

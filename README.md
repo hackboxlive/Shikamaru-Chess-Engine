@@ -31,4 +31,8 @@ Some implementation details:
 	- Characters 'p' & 'P' represent a Pawn
 	- The lower-case characters represent a black piece while the upper-case characters represent a white piece
 
+The bits are counted from the top-left corner to the bottom-right corner in that order.
 
+The moves.hpp file consists of all the move generation code of the chess-engine. Tricks used here:
+	- Some basic bit manipulation
+	- Hyperbola Quintessence which applies to the o^(o-2r) trick
