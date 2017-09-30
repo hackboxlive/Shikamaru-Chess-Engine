@@ -38,3 +38,4 @@ The moves.hpp file consists of all the move generation code of the chess-engine.
 	- Hyperbola Quintessence which applies to the o^(o-2r) trick for bishop, rook and queen movements
 	- Added moves for king and knight using sliding constant mask values
 	- Added king danger detection from opponent's piece
+	- Added basic castling technique (for each side, queen and king)
