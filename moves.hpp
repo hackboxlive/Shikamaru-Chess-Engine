@@ -6,13 +6,16 @@ class moves	{
 	static const long long file_8 = 255;	//bitboard with pieces on 8th row
 	static const long long file_4 = 1095216660480;	//bitboard with pieces on 4th row
 	static const long long file_5 = 4278190080;	//bitboard with pieces on 5th row
+	static const long long file_1 = -72057594037927936; //bitboard with pieces on 1st row
 	static const long long file_ab = 217020518514230019;	//bitboard with pieces on column a & b
 	static const long long file_gh = -4557430888798830400;	//bitboard with all pieces on column g & h
 	static const long long knight_span = 43234889994; //all the allowed positions if the knight was at (5,5)
 	static const long long king_span = 460039L;	//all the allowed movements of king
 	static long long occupied;
+	static long long white_pieces;
 	static long long not_white_pieces;
 	static long long black_pieces;
+	static long long not_black_pieces;
 	static long long empty;
 	
 	public:
@@ -104,7 +107,7 @@ class moves	{
 			}
 
 			//move 2 straight
-			pawn_moves = (WP >> 16) & (empty >> 8) & file_4;
+			pawn_moves = (WP >> 16) & empty & (empty >> 8) & file_4;
 			for(int i = 0 ; i < 64 ; i++)	{
 				if((pawn_moves >> i) & 1 == 1)	{
 					list += (to_string(i / 8 + 2) + to_string(i % 8) + to_string(i / 8) + to_string(i % 8));
@@ -150,7 +153,7 @@ class moves	{
 							i++;
 							possibility /= 2;
 						}
-						list += (to_string(i % 8 - 1) + to_string(i % 8) + " E");
+						list += (to_string(i % 8 - 1) + to_string(i % 8) + "WE");
 					}
 					//en passant left
 					possibility = (WP >> 1) & BP & file_5 & ~file_h & file_mask_h[e_file];	//shows pieces to remove, not destination
@@ -160,7 +163,99 @@ class moves	{
 							i++;
 							possibility >>= 1;
 						}
-						list += (to_string(i % 8 + 1) + to_string(i % 8) + " E");
+						list += (to_string(i % 8 + 1) + to_string(i % 8) + "WE");
+					}
+				}
+			}
+			return list;
+		}
+
+		static string possible_pawn_black(string history, long long BP, long long WP)	{
+			string list = "";
+			long long pawn_moves;
+
+			//capture right
+			pawn_moves = (BP << 7) & white_pieces & ~file_1 & ~file_h;
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((pawn_moves >> i) & 1 == 1)	{
+					list += (to_string(i / 8 - 1) + to_string(i % 8 + 1) + to_string(i / 8) + to_string(i % 8));
+				}
+			}
+
+			//capture left
+			pawn_moves = (BP << 9) & white_pieces & ~file_1 & ~file_a;
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((pawn_moves >> i) & 1 == 1)	{
+					list += (to_string(i / 8 - 1) + to_string(i % 8 - 1) + to_string(i / 8) + to_string(i % 8));
+				}
+			}
+
+			//move straight
+			pawn_moves = (BP << 8) & empty & ~file_1;
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((pawn_moves >> i) & 1 == 1)	{
+					list += (to_string(i / 8 - 1) + to_string(i % 8) + to_string(i / 8) + to_string(i % 8));
+				}
+			}
+
+			//move 2 straight
+			pawn_moves = (BP << 16) & empty & (empty << 8) & file_5;
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((pawn_moves >> i) & 1 == 1)	{
+					list += (to_string(i / 8 - 2) + to_string(i % 8) + to_string(i / 8) + to_string(i % 8));
+				}
+			}
+
+			//promotion while capturing right
+			pawn_moves = (BP << 7) & white_pieces & file_1 & ~file_h;
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((pawn_moves >> i) & 1 == 1)	{
+					list += (to_string(i % 8 + 1) + to_string(i % 8) + "qP" + to_string(i % 8 + 1) + to_string(i % 8) + "rP" + to_string(i % 8 + 1) + to_string(i % 8) + "bP" + to_string(i % 8 + 1) + to_string(i % 8) + "nP");
+				}
+			}
+
+			//promotion while capturing left
+			pawn_moves = (BP << 9) & white_pieces & file_1 & ~file_a;
+			for(int i = 0 ; i < 64  ; i++)	{
+				if((pawn_moves >> i) & 1 == 1)	{
+					list += (to_string(i % 8 - 1) + to_string(i % 8) + "HEREqP" + to_string(i % 8 - 1) + to_string(i % 8) + "rP" + to_string(i % 8 - 1) + to_string(i % 8) + "bP" + to_string(i % 8 - 1) + to_string(i % 8) + "nP");
+				}
+			}
+
+			//promotion while moving forward
+			pawn_moves = (BP << 8) & empty & file_1;
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((pawn_moves >> i) & 1 == 1)	{
+					list += (to_string(i % 8) + to_string(i % 8) + "qP" + to_string(i % 8) + to_string(i % 8) + "rP" + to_string(i % 8) + to_string(i % 8) + "bP" + to_string(i % 8) + to_string(i % 8) + "nP");
+				}
+			}
+
+			//en passants moves
+			long long file_mask_h[8] = {
+				72340172838076673, 144680345676153346, 289360691352306692, 578721382704613384, 1157442765409226768, 2314885530818453536, 4629771061636907072, -9187201950435737472
+			};
+			if(history.length() >= 4)	{
+				if(history[history.length() - 1] == history[history.length() - 3] && abs(history[history.length() - 2] - history[history.length() - 4]) == 2)	{
+					int e_file = history[history.length() - 1] - '0';
+					//en passant right
+					long long possibility = (BP >> 1) & WP & file_4 & ~file_h & file_mask_h[e_file];	//shows piece to remove, not destination
+					if(possibility != 0)	{
+						int i = 0;
+						while(possibility % 2 == 0)	{
+							i++;
+							possibility >>= 1;
+						}
+						list += (to_string(i % 8 + 1) + to_string(i % 8) + "bE");
+					}
+					//en passant left
+					possibility = (BP << 1) & WP & file_4 & ~file_a & file_mask_h[e_file];	//shows pieces to remove, not destination
+					if(possibility != 0)	{
+						int i = 0;
+						while(possibility & 1 == 1)	{
+							i++;
+							possibility >>= 1;
+						}
+						list += (to_string(i % 8 - 1) + to_string(i % 8) + "bE");
 					}
 				}
 			}
@@ -172,6 +267,21 @@ class moves	{
 			for(int i = 0 ; i < 64 ; i++)	{
 				if((WB >> i) & 1 == 1)	{
 					long long k = diagonal_and_antidiagonal_moves(i) & not_white_pieces;
+					for(int j = 0 ; j < 64 ; j++)	{
+						if((k >> j) & 1 == 1)	{
+							list += to_string(i / 8) + to_string(i % 8) + to_string(j / 8) + to_string(j % 8);
+						}
+					}
+				}
+			}
+			return list;
+		}
+
+		static string possible_bishop_black(long long occupied, long long BB)	{
+			string list = "";
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((BB >> i) & 1 == 1)	{
+					long long k = diagonal_and_antidiagonal_moves(i) & not_black_pieces;
 					for(int j = 0 ; j < 64 ; j++)	{
 						if((k >> j) & 1 == 1)	{
 							list += to_string(i / 8) + to_string(i % 8) + to_string(j / 8) + to_string(j % 8);
@@ -197,12 +307,44 @@ class moves	{
 			return list;
 		}
 
+		static string possible_rook_black(long long occupied, long long BR)	{
+			string list = "";
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((BR >> i) & 1 == 1)	{
+					long long k = horizontal_and_vertical_moves(i) & not_black_pieces;
+					for(int j = 0 ; j < 64 ; j++)	{
+						if((k >> j) & 1 == 1)	{
+							list += to_string(i / 8) + to_string(i % 8) + to_string(j / 8) + to_string(j % 8);
+						}
+					}
+				}
+			}
+			return list;
+		}
+
 		static string possible_queen_white(long long occupied, long long WQ)	{
 			string list = "";
 			for(int i = 0 ; i < 64 ; i++)	{
 				if((WQ >> i) & 1 == 1)	{
 					long long k = diagonal_and_antidiagonal_moves(i) & not_white_pieces;
 					k |= (horizontal_and_vertical_moves(i) & not_white_pieces);
+					for(int j = 0 ; j < 64 ; j++)	{
+						if((k >> j) & 1 == 1)	{
+							list += to_string(i / 8) + to_string(i % 8) + to_string(j / 8) + to_string(j % 8);
+						}
+					}
+				}
+			}
+			return list;
+		}
+
+		static string possible_queen_black(long long occupied, long long BQ)	{
+			string list = "";
+			cout<<BQ<<endl;
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((BQ >> i) & 1 == 1)	{
+					long long k = diagonal_and_antidiagonal_moves(i) & not_black_pieces;
+					k |= (horizontal_and_vertical_moves(i) & not_black_pieces);
 					for(int j = 0 ; j < 64 ; j++)	{
 						if((k >> j) & 1 == 1)	{
 							list += to_string(i / 8) + to_string(i % 8) + to_string(j / 8) + to_string(j % 8);
@@ -240,6 +382,33 @@ class moves	{
 			return list;
 		}
 
+		static string possible_knight_black(long long occupied, long long BN)	{
+			string list = "";
+			long long knight_move;
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((BN >> i) & 1 == 1)	{
+					if(i > 18)	{
+						knight_move = knight_span << (i - 18);
+					}
+					else	{
+						knight_move = knight_span >> (18 - i);
+					}
+					if(i % 8 < 4)	{
+						knight_move &= (~file_gh & not_black_pieces);
+					}
+					else	{
+						knight_move &= (~file_ab & not_black_pieces);
+					}
+					for(int j = 0 ; j < 64 ; j++)	{
+						if((knight_move >> j) & 1 == 1)	{
+							list += to_string(i / 8) + to_string(i % 8) + to_string(j / 8) + to_string(j % 8);
+						}
+					}
+				}
+			}
+			return list;
+		}
+
 		static string possible_king_white(long long occupied, long long WK)	{
 			string list = "";
 			long long king_move;
@@ -256,6 +425,33 @@ class moves	{
 					}
 					else	{
 						king_move &= (~file_ab & not_white_pieces);
+					}
+					for(int j = 0 ; j < 64 ; j++)	{
+						if((king_move >> j) & 1 == 1)	{
+							list += to_string(i / 8) + to_string(i % 8) + to_string(j / 8) + to_string(j % 8);
+						}
+					}
+				}
+			}
+			return list;
+		}
+
+		static string possible_king_black(long long occupied, long long BK)	{
+			string list = "";
+			long long king_move;
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((BK >> i) & 1 == 1)	{
+					if(i > 9)	{
+						king_move = king_span << (i - 9);
+					}
+					else	{
+						king_move = king_span >> (9 - i);
+					}
+					if(i % 8 < 4)	{
+						king_move &= (~file_gh & not_black_pieces);
+					}
+					else	{
+						king_move &= (~file_ab & not_black_pieces);
 					}
 					for(int j = 0 ; j < 64 ; j++)	{
 						if((king_move >> j) & 1 == 1)	{
@@ -397,7 +593,17 @@ class moves	{
 			occupied = BP | BN | BB | BR | BQ | BK | WP | WN | WB | WR | WQ | WK;
 			empty = ~occupied;
 			string list = possible_pawn_white(history, WP, BP) + possible_bishop_white(occupied, WB) + possible_rook_white(occupied, WR) + possible_queen_white(occupied, WQ) + possible_knight_white(occupied, WN) + possible_king_white(occupied, WK);
-			unsafe_for_white(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
+			//unsafe_for_white(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
+			return list;
+		}
+
+		static string possible_moves_black(string history, long long WP, long long WN, long long WB, long long WR, long long WQ, long long WK, long long BP, long long BN, long long BB, long long BR, long long BQ, long long BK)	{
+			not_black_pieces = ~(BP | BN | BB | BR | BQ | BK | WK);
+			white_pieces = WP | WN | WB | WR | WQ;
+			occupied = BP | BN | BB | BR | BQ | BK | WP | WN | WB | WR | WQ | WK;
+			empty = ~occupied;
+			string list = possible_pawn_black(history, BP, WP) + possible_bishop_black(occupied, BB) + possible_rook_black(occupied, BR) + possible_queen_black(occupied, BQ) + possible_knight_black(occupied, BN) + possible_king_black(occupied, BK);
+//			unsafe_for_black(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
 			return list;
 		}
 };
