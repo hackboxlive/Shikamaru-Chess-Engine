@@ -566,7 +566,29 @@ class moves	{
 			return unsafe;
 		}
 
-		static string possible_moves_white(long long WP, long long WN, long long WB, long long WR, long long WQ, long long WK, long long BP, long long BN, long long BB, long long BR, long long BQ, long long BK, long long EP)	{
+		static string possible_castle_white(long long WR,bool CWK,bool CWQ)	{
+			string list="";
+			if(CWK && (((1LL << castle_rooks[0]) & WR) != 0))	{
+				list += "7476";
+			}
+			if(CWQ && (((1LL << castle_rooks[1]) & WR) != 0))	{
+				list+="7472";
+			}
+			return list;
+		}
+
+		static string possible_castle_black(long long BR,bool CBK,bool CBQ)	{
+			string list="";
+			if(CBK && (((1LL << castle_rooks[2]) & BR) != 0))	{
+				list += "0406";
+			}
+			if(CBQ && (((1LL << castle_rooks[3]) & BR) != 0))	{
+				list+="0402";
+			}
+			return list;
+		}
+
+		static string possible_moves_white(long long WP, long long WN, long long WB, long long WR, long long WQ, long long WK, long long BP, long long BN, long long BB, long long BR, long long BQ, long long BK, long long EP, bool CWK, bool CWQ, bool CBK, bool CBQ)	{
 			not_white_pieces = ~(WP | WN | WB | WR | WQ | WK | BK);
 			black_pieces = BP | BN | BB | BR | BQ;
 			occupied = BP | BN | BB | BR | BQ | BK | WP | WN | WB | WR | WQ | WK;
@@ -576,7 +598,7 @@ class moves	{
 			return list;
 		}
 
-		static string possible_moves_black(long long WP, long long WN, long long WB, long long WR, long long WQ, long long WK, long long BP, long long BN, long long BB, long long BR, long long BQ, long long BK, long long EP)	{
+		static string possible_moves_black(long long WP, long long WN, long long WB, long long WR, long long WQ, long long WK, long long BP, long long BN, long long BB, long long BR, long long BQ, long long BK, long long EP, bool CWK, bool CWQ, bool CBK, bool CBQ)	{
 			not_black_pieces = ~(BP | BN | BB | BR | BQ | BK | WK);
 			white_pieces = WP | WN | WB | WR | WQ;
 			occupied = BP | BN | BB | BR | BQ | BK | WP | WN | WB | WR | WQ | WK;

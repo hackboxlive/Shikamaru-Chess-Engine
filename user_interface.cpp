@@ -22,6 +22,11 @@ long long moves::empty;
 long long moves::occupied;
 long long moves::not_black_pieces;
 long long moves::white_pieces;
+
+bool castle_white_king_side;
+bool castle_black_king_side;
+bool castle_white_queen_side;
+bool castle_black_queen_side;
 int main()	{
 	long long WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK, EP;
 	board_generation::initiate_standard_chess();
@@ -38,9 +43,9 @@ int main()	{
 	BQ = board_generation::BQ;
 	BK = board_generation::BK;
 	EP = 0;
-//	cout<<WP<<endl;
-//	string list = moves::possible_moves_white(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK, EP);
-	string list = moves::possible_moves_black(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK, EP);
+	castle_black_king_side = castle_black_queen_side = castle_white_queen_side = castle_white_king_side = true;	//castling is possible initially
+//	string list = moves::possible_moves_white(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK, EP, castle_white_king_side, castle_white_queen_side, castle_black_king_side, castle_black_queen_side);
+	string list = moves::possible_moves_black(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK, EP, castle_white_king_side, castle_white_queen_side, castle_black_king_side, castle_black_queen_side);
 	cout<<list<<endl;
 	return 0;
 }
