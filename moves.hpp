@@ -6,7 +6,10 @@ class moves	{
 	static const long long file_8 = 255;	//bitboard with pieces on 8th row
 	static const long long file_4 = 1095216660480;	//bitboard with pieces on 4th row
 	static const long long file_5 = 4278190080;	//bitboard with pieces on 5th row
-
+	static const long long file_ab = 217020518514230019;	//bitboard with pieces on column a & b
+	static const long long file_gh = -4557430888798830400;	//bitboard with all pieces on column g & h
+	static const long long knight_span = 43234889994; //all the allowed positions if the knight was at (5,5)
+	static const long long king_span = 460039L;	//all the allowed movements of king
 	static long long occupied;
 	static long long not_white_pieces;
 	static long long black_pieces;
@@ -22,7 +25,7 @@ class moves	{
 					chess_[i/8][i%8]="P";
 				}
 				else	{
-					chess_[i/8][i%8]=" ";
+					chess_[i/8][i%8]="s";
 				}
 			}
 			for(int i=0;i<8;i++)	{
@@ -169,9 +172,93 @@ class moves	{
 			for(int i = 0 ; i < 64 ; i++)	{
 				if((WB >> i) & 1 == 1)	{
 					long long k = diagonal_and_antidiagonal_moves(i) & not_white_pieces;
-					draw_board(k);
 					for(int j = 0 ; j < 64 ; j++)	{
 						if((k >> j) & 1 == 1)	{
+							list += to_string(i / 8) + to_string(i % 8) + to_string(j / 8) + to_string(j % 8);
+						}
+					}
+				}
+			}
+			return list;
+		}
+
+		static string possible_rook_white(long long occupied, long long WR)	{
+			string list = "";
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((WR >> i) & 1 == 1)	{
+					long long k = horizontal_and_vertical_moves(i) & not_white_pieces;
+					for(int j = 0 ; j < 64 ; j++)	{
+						if((k >> j) & 1 == 1)	{
+							list += to_string(i / 8) + to_string(i % 8) + to_string(j / 8) + to_string(j % 8);
+						}
+					}
+				}
+			}
+			return list;
+		}
+
+		static string possible_queen_white(long long occupied, long long WQ)	{
+			string list = "";
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((WQ >> i) & 1 == 1)	{
+					long long k = diagonal_and_antidiagonal_moves(i) & not_white_pieces;
+					k |= (horizontal_and_vertical_moves(i) & not_white_pieces);
+					for(int j = 0 ; j < 64 ; j++)	{
+						if((k >> j) & 1 == 1)	{
+							list += to_string(i / 8) + to_string(i % 8) + to_string(j / 8) + to_string(j % 8);
+						}
+					}
+				}
+			}
+			return list;
+		}
+
+		static string possible_knight_white(long long occupied, long long WN)	{
+			string list = "";
+			long long knight_move;
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((WN >> i) & 1 == 1)	{
+					if(i > 18)	{
+						knight_move = knight_span << (i - 18);
+					}
+					else	{
+						knight_move = knight_span >> (18 - i);
+					}
+					if(i % 8 < 4)	{
+						knight_move &= (~file_gh & not_white_pieces);
+					}
+					else	{
+						knight_move &= (~file_ab & not_white_pieces);
+					}
+					for(int j = 0 ; j < 64 ; j++)	{
+						if((knight_move >> j) & 1 == 1)	{
+							list += to_string(i / 8) + to_string(i % 8) + to_string(j / 8) + to_string(j % 8);
+						}
+					}
+				}
+			}
+			return list;
+		}
+
+		static string possible_king_white(long long occupied, long long WK)	{
+			string list = "";
+			long long king_move;
+			for(int i = 0 ; i < 64 ; i++)	{
+				if((WK >> i) & 1 == 1)	{
+					if(i > 9)	{
+						king_move = king_span << (i - 9);
+					}
+					else	{
+						king_move = king_span >> (9 - i);
+					}
+					if(i % 8 < 4)	{
+						king_move &= (~file_gh & not_white_pieces);
+					}
+					else	{
+						king_move &= (~file_ab & not_white_pieces);
+					}
+					for(int j = 0 ; j < 64 ; j++)	{
+						if((king_move >> j) & 1 == 1)	{
 							list += to_string(i / 8) + to_string(i % 8) + to_string(j / 8) + to_string(j % 8);
 						}
 					}
@@ -185,7 +272,7 @@ class moves	{
 			black_pieces = BP | BN | BB | BR | BQ;
 			occupied = BP | BN | BB | BR | BQ | BK | WP | WN | WB | WR | WQ | WK;
 			empty = ~occupied;
-			string list = possible_pawn_white(history, WP, BP) + possible_bishop_white(occupied, WB);
+			string list = possible_pawn_white(history, WP, BP) + possible_bishop_white(occupied, WB) + possible_rook_white(occupied, WR) + possible_queen_white(occupied, WQ) + possible_knight_white(occupied, WN) + possible_king_white(occupied, WK);
 			return list;
 		}
 };
