@@ -32,7 +32,8 @@ int main()	{
 			v+=(str[i]-'0');
 		}
 	//	cout<<(1LL<<63)<<endl;
-		cout<<v<<", ";
+//		cout<<v<<", ";
 	}
+//	cout<<25u - 50<<endl;
 	return 0;
 }
