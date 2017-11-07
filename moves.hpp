@@ -208,7 +208,7 @@ class moves	{
 			pawn_moves = (BP << 9) & white_pieces & file_1 & ~file_a;
 			for(int i = 0 ; i < 64  ; i++)	{
 				if((pawn_moves >> i) & 1 == 1)	{
-					list += (to_string(i % 8 - 1) + to_string(i % 8) + "HEREqP" + to_string(i % 8 - 1) + to_string(i % 8) + "rP" + to_string(i % 8 - 1) + to_string(i % 8) + "bP" + to_string(i % 8 - 1) + to_string(i % 8) + "nP");
+					list += (to_string(i % 8 - 1) + to_string(i % 8) + "qP" + to_string(i % 8 - 1) + to_string(i % 8) + "rP" + to_string(i % 8 - 1) + to_string(i % 8) + "bP" + to_string(i % 8 - 1) + to_string(i % 8) + "nP");
 				}
 			}
 
@@ -606,5 +606,98 @@ class moves	{
 			string list = possible_pawn_black(BP, WP, EP) + possible_bishop_black(occupied, BB) + possible_rook_black(occupied, BR) + possible_queen_black(occupied, BQ) + possible_knight_black(occupied, BN) + possible_king_black(occupied, BK);
 			//unsafe_for_black(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK);
 			return list;
+		}
+
+		static long long make_move_enpassant(long long board, string move)	{
+			long long file_mask_h[8] = {
+				72340172838076673, 144680345676153346, 289360691352306692, 578721382704613384, 1157442765409226768, 2314885530818453536, 4629771061636907072, -9187201950435737472
+			};			
+			if(move[3] >= '0' && move[3] <= '9')	{
+				int start = (move[0] - '0') * 8 + (move[1] - '0');
+				if(abs(move[0] - move[2]) == 2 && ((board >> start) & 1) == 1)	{
+					return file_mask_h[move[1] - '0'];
+				}
+			}
+			return 0;
+		}
+
+		static long long make_move(long long board, string move, char type)	{
+			long long file_mask_8[8] = {
+				255, 65280, 16711680, 4278190080, 1095216660480, 280375465082880, 71776119061217280, -72057594037927936
+			};
+			long long file_mask_h[8] = {
+				72340172838076673, 144680345676153346, 289360691352306692, 578721382704613384, 1157442765409226768, 2314885530818453536, 4629771061636907072, -9187201950435737472
+			};
+			//regular move
+			if(move[3] >= '0' && move[3] <= '9')	{
+				int start = (move[0] - '0') * 8 + move[1] - '0';
+				int end = (move[2] - '0') * 8 + move[3] - '0';
+				if(((board >> start) & 1) == 1)	{
+					board &= ~(1LL << start);
+					board |= (1LL << end);
+				}
+				else	{
+					board &= ~(1LL << end);
+				}
+			}
+			//pawn promotion
+			else if(move[3] == 'P')	{
+				long long s, e;
+				if(move[2] >= 'A' && move[2] <= 'Z')	{
+					s = file_mask_h[move[0] - '0'] & file_mask_8[6];
+					e = file_mask_h[move[1] - '0'] & file_mask_8[7];
+				}
+				else	{
+					s = file_mask_h[move[0] - '0'] & file_mask_8[1];
+					e = file_mask_h[move[1] - '0'] & file_mask_8[0];					
+				}
+				int start = 0, end = 0;
+				while(s & 1 == 0)	{
+					s >>= 1;
+					++start;
+				}
+				while(e & 1 == 0)	{
+					e >>= 1;
+					++end;
+				}
+				if(type == move[2])	{
+					board &= ~(1LL << start);
+					board |= (1LL << end);
+				}
+				else	{
+					board &= ~(1LL <<end);
+				}
+			}
+			//en passant
+			else if(move[3] == 'E')	{
+				long long s, e;
+				if(move[2] >= 'A' && move[2] <= 'Z')	{
+					s = file_mask_h[move[0] - '0'] & file_mask_8[4];
+					e = file_mask_h[move[1] - '0'] & file_mask_8[5];
+					board &= ~(1LL << (file_mask_h[move[1] - '0'] & file_mask_8[4]));
+				}
+				else	{
+					s = file_mask_h[move[0] - '0'] & file_mask_8[3];
+					e = file_mask_h[move[1] - '0'] & file_mask_8[2];
+					board &= ~(1LL << (file_mask_h[move[1] - '0'] & file_mask_8[3]));
+				}
+				int start = 0, end = 0;
+				while(s & 1 == 0)	{
+					s >>= 1;
+					++start;
+				}
+				while(e & 1 == 0)	{
+					e >>= 1;
+					++end;
+				}
+				if((board >> start) & 1 == 1)	{
+					board &= ~(1LL << start);
+					board |= (1LL << end);
+				}
+			}
+			else	{
+				cout<<"ERROR: Invalid move type\n";
+			}
+			return board;
 		}
 };

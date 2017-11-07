@@ -39,3 +39,5 @@ The moves.hpp file consists of all the move generation code of the chess-engine.
 	- Added moves for king and knight using sliding constant mask values
 	- Added king danger detection from opponent's piece
 	- Added basic castling technique (for each side, queen and king)
+
+The chess engine is checked for optimizations throught Perft Debugging, and hopefully doesn't contain any problems. :P
