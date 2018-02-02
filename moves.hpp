@@ -83,7 +83,7 @@ class moves	{
 			long long pawn_moves;
 
 			//capture right
-			pawn_moves = (WP >> 7) & black_pieces & ~file_8 & ~file_a;
+			pawn_moves = (WP >> 7) & black_pieces & occupied & ~file_8 & ~file_a;
 			for(int i = 0 ; i < 64 ; i++)	{
 				if((pawn_moves >> i) & 1 == 1)	{
 					list += (to_string(i / 8 + 1) + to_string(i % 8 - 1) + to_string(i / 8) + to_string(i % 8));
@@ -91,7 +91,7 @@ class moves	{
 			}
 
 			//capture left
-			pawn_moves = (WP >> 9) & black_pieces & ~file_8 & ~file_h;
+			pawn_moves = (WP >> 9) & black_pieces & occupied & ~file_8 & ~file_h;
 			for(int i = 0 ; i < 64 ; i++)	{
 				if((pawn_moves >> i) & 1 == 1)	{
 					list += (to_string(i / 8 + 1) + to_string(i % 8 + 1) + to_string(i / 8) + to_string(i % 8));
@@ -115,7 +115,7 @@ class moves	{
 			}
 
 			//promotion while capturing right
-			pawn_moves = (WP >> 7) & black_pieces & file_8 & ~file_a;
+			pawn_moves = (WP >> 7) & black_pieces & occupied & file_8 & ~file_a;
 			for(int i = 0 ; i < 64 ; i++)	{
 				if((pawn_moves >> i) & 1 == 1)	{
 					list += (to_string(i % 8 - 1) + to_string(i % 8) + "QP" + to_string(i % 8 - 1) + to_string(i % 8) + "RP" + to_string(i % 8 - 1) + to_string(i % 8) + "BP" + to_string(i % 8 - 1) + to_string(i % 8) + "NP");
@@ -123,7 +123,7 @@ class moves	{
 			}
 
 			//promotion while capturing left
-			pawn_moves = (WP >> 9) & black_pieces & file_8 & ~file_h;
+			pawn_moves = (WP >> 9) & black_pieces & occupied & file_8 & ~file_h;
 			for(int i = 0 ; i < 64  ; i++)	{
 				if((pawn_moves >> i) & 1 == 1)	{
 					list += (to_string(i % 8 + 1) + to_string(i % 8) + "QP" + to_string(i % 8 + 1) + to_string(i % 8) + "RP" + to_string(i % 8 + 1) + to_string(i % 8) + "BP" + to_string(i % 8 + 1) + to_string(i % 8) + "NP");
@@ -139,19 +139,21 @@ class moves	{
 			}
 
 			//en passants moves
-			long long possibility = (WP << 1) && BP && file_5 & ~file_a & EP;
+			long long possibility = (WP << 1) & BP & file_5 & ~file_a & EP;
 			if(possibility != 0)	{
+//				cout<<possibility<<"here\n";
 				int index = 0;
-				while(possibility & 1 == 1)	{
+				while(possibility & 1 == 0)	{
 					index++;
 					possibility >>= 1;
 				}
 				list += to_string(index % 8 - 1) + to_string(index % 8) + "WE";
-			}
-			possibility = (WP >> 1) && BP && file_5 & ~file_h & EP;
+			
+}			possibility = (WP >> 1) & BP & file_5 & ~file_h & EP;
 			if(possibility != 0)	{
+//				cout<<possibility<<"HERE\n";
 				int index = 0;
-				while(possibility & 1 == 1)	{
+				while(possibility & 1 == 0)	{
 					index++;
 					possibility >>= 1;
 				}
@@ -165,7 +167,7 @@ class moves	{
 			long long pawn_moves;
 
 			//capture right
-			pawn_moves = (BP << 7) & white_pieces & ~file_1 & ~file_h;
+			pawn_moves = (BP << 7) & white_pieces & occupied & ~file_1 & ~file_h;
 			for(int i = 0 ; i < 64 ; i++)	{
 				if((pawn_moves >> i) & 1 == 1)	{
 					list += (to_string(i / 8 - 1) + to_string(i % 8 + 1) + to_string(i / 8) + to_string(i % 8));
@@ -173,7 +175,7 @@ class moves	{
 			}
 
 			//capture left
-			pawn_moves = (BP << 9) & white_pieces & ~file_1 & ~file_a;
+			pawn_moves = (BP << 9) & white_pieces & occupied & ~file_1 & ~file_a;
 			for(int i = 0 ; i < 64 ; i++)	{
 				if((pawn_moves >> i) & 1 == 1)	{
 					list += (to_string(i / 8 - 1) + to_string(i % 8 - 1) + to_string(i / 8) + to_string(i % 8));
@@ -224,20 +226,20 @@ class moves	{
 			long long possibility = (BP >> 1) & WP & file_4 & ~file_h & EP;
 			if(possibility != 0)	{
 				int index = 0;
-				while(possibility & 1 == 1)	{
+				while(possibility & 1 == 0)	{
 					index++;
 					possibility >>= 1;
 				}
-				list += to_string(index % 8 + 1) + to_string(index % 8) + "bE";
+				list += to_string(index % 8 + 1) + to_string(index % 8) + "BE";
 			}
 			possibility = (BP << 1) & WP & file_4 & ~file_a & EP;
 			if(possibility != 0)	{
 				int index = 0;
-				while(possibility & 1 == 1)	{
+				while(possibility & 1 == 0)	{
 					index++;
 					possibility >>= 1;
 				}
-				list += to_string(index % 8 - 1) + to_string(index % 8) + "bE";
+				list += to_string(index % 8 - 1) + to_string(index % 8) + "BE";
 			}
 			return list;
 		}
@@ -446,8 +448,8 @@ class moves	{
 			long long unsafe;
 			occupied = BP | BN | BB | BR | BQ | BK | WP | WN | WB | WR | WQ | WK;
 			//unsafe positions from white pawns
-			unsafe = (WP >> 7) & ~file_a;	//right pawn capture
-			unsafe |= (WP >> 9) & ~file_h;	//left pawn capture
+			unsafe = (WP >>> 7) & ~file_a;	//right pawn capture
+			unsafe |= (WP >>> 9) & ~file_h;	//left pawn capture
 			//unsafe positions from white knights
 			long long white_move;
 			for(int i = 0 ; i < 64 ; i++)	{
@@ -568,21 +570,25 @@ class moves	{
 
 		static string possible_castle_white(long long WR,bool CWK,bool CWQ)	{
 			string list="";
-			if(CWK && (((1LL << castle_rooks[0]) & WR) != 0))	{
-				list += "7476";
+			if(CWK && (((1LL << 63) & WR) != 0))	{
+				if((occupied & ((1LL << 61) | (1LL << 62))) == 0)	{
+					list += "7476";
+				}
 			}
-			if(CWQ && (((1LL << castle_rooks[1]) & WR) != 0))	{
-				list+="7472";
+			if(CWQ && (((1LL << 56) & WR) != 0))	{
+				if((occupied & ((1LL << 57) | (1LL << 58) | (1LL << 59))) == 0)	{
+					list+="7472";
+				}
 			}
 			return list;
 		}
 
 		static string possible_castle_black(long long BR,bool CBK,bool CBQ)	{
 			string list="";
-			if(CBK && (((1LL << castle_rooks[2]) & BR) != 0))	{
+			if(CBK && (((1LL << 7) & BR) != 0))	{
 				list += "0406";
 			}
-			if(CBQ && (((1LL << castle_rooks[3]) & BR) != 0))	{
+			if(CBQ && (((1LL << 0) & BR) != 0))	{
 				list+="0402";
 			}
 			return list;
@@ -614,7 +620,7 @@ class moves	{
 			};			
 			if(move[3] >= '0' && move[3] <= '9')	{
 				int start = (move[0] - '0') * 8 + (move[1] - '0');
-				if(abs(move[0] - move[2]) == 2 && ((board >> start) & 1) == 1)	{
+				if(abs(move[0] - move[2]) == 2 && ((board >>> start) & 1) == 1)	{
 					return file_mask_h[move[1] - '0'];
 				}
 			}
@@ -632,7 +638,7 @@ class moves	{
 			if(move[3] >= '0' && move[3] <= '9')	{
 				int start = (move[0] - '0') * 8 + move[1] - '0';
 				int end = (move[2] - '0') * 8 + move[3] - '0';
-				if(((board >> start) & 1) == 1)	{
+				if(((board >>> start) & 1) == 1)	{
 					board &= ~(1LL << start);
 					board |= (1LL << end);
 				}
@@ -690,13 +696,13 @@ class moves	{
 					e >>= 1;
 					++end;
 				}
-				if((board >> start) & 1 == 1)	{
+				if((board >>> start) & 1 == 1)	{
 					board &= ~(1LL << start);
 					board |= (1LL << end);
 				}
 			}
 			else	{
-				cout<<"ERROR: Invalid move type\n";
+				cout<<"ERROR: Invalid move type " << move[3]<<endl;
 			}
 			return board;
 		}
