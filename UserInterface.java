@@ -2,8 +2,14 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 public class UserInterface extends JPanel {
-    static long WP=0L,WN=0L,WB=0L,WR=0L,WQ=0L,WK=0L,BP=0L,BN=0L,BB=0L,BR=0L,BQ=0L,BK=0L;
-    static long UniversalWP=0L,UniversalWN=0L,UniversalWB=0L,UniversalWR=0L,UniversalWQ=0L,UniversalWK=0L,UniversalBP=0L,UniversalBN=0L,UniversalBB=0L,UniversalBR=0L,UniversalBQ=0L,UniversalBK=0L;
+    static long WP=0L,WN=0L,WB=0L,WR=0L,WQ=0L,WK=0L,BP=0L,BN=0L,BB=0L,BR=0L,BQ=0L,BK=0L,EP=0L;
+    static boolean CWK=true,CWQ=true,CBK=true,CBQ=true,WhiteToMove=true;//true=castle is possible
+    static long UniversalWP=0L,UniversalWN=0L,UniversalWB=0L,UniversalWR=0L,
+            UniversalWQ=0L,UniversalWK=0L,UniversalBP=0L,UniversalBN=0L,
+            UniversalBB=0L,UniversalBR=0L,UniversalBQ=0L,UniversalBK=0L,
+            UniversalEP=0L;
+    static boolean UniversalCastleWK=true,UniversalCastleWQ=true,
+            UniversalCastleBK=true,UniversalCastleBQ=true;//true=castle is possible
     static int humanIsWhite=1;
     static int rating=0;
     static int border=10;//the amount of empty space around the frame
@@ -16,8 +22,20 @@ public class UserInterface extends JPanel {
         javaF.setSize(757, 570);
         javaF.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width-javaF.getWidth())/2,
                 (Toolkit.getDefaultToolkit().getScreenSize().height-javaF.getHeight())/2);
-        javaF.setVisible(true);
-        newGame();
+        //javaF.setVisible(true);
+        //newGame();
+        BoardGeneration.importFEN("r3k2r/p1pNqpb1/bn2pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1");
+        //BoardGeneration.initiateStandardChess();
+        BoardGeneration.drawArray(WP,WN,WB,WR,WQ,WK,BP,BN,BB,BR,BQ,BK);
+        Perft.perftRoot(WP,WN,WB,WR,WQ,WK,BP,BN,BB,BR,BQ,BK,EP,CWK,CWQ,CBK,CBQ,WhiteToMove,0);
+        if (Perft.perftTotalMoveCounter==0) {
+            if (WhiteToMove) {
+                Perft.perftTotalMoveCounter=Moves.possibleMovesW(WP,WN,WB,WR,WQ,WK,BP,BN,BB,BR,BQ,BK,EP,CWK,CWQ,CBK,CBQ).length()/4;
+            } else {
+                Perft.perftTotalMoveCounter=Moves.possibleMovesB(WP,WN,WB,WR,WQ,WK,BP,BN,BB,BR,BQ,BK,EP,CWK,CWQ,CBK,CBQ).length()/4;
+            }
+        }
+        System.out.print("Total: "+Perft.perftTotalMoveCounter);
         javaF.repaint();
     }
     @Override
@@ -86,6 +104,7 @@ public class UserInterface extends JPanel {
     }
     public static void newGame() {
         BoardGeneration.initiateStandardChess();
-        Moves.posibleMovesW("",WP,WN,WB,WR,WQ,WK,BP,BN,BB,BR,BQ,BK);
+        CWK=true; CWQ=true; CBK=true; CBQ=true;
+        EP=0;
     }
 }
