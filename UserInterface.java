@@ -85,6 +85,7 @@ public class UserInterface extends JPanel {
         g.fill3DRect((int)(8*squareSize)+2*border, (int)(8*squareSize)+border, 200, border, true);
     }
     public static void newGame() {
-        BoardGeneration.initiateChess960();
+        BoardGeneration.initiateStandardChess();
+        Moves.posibleMovesW("",WP,WN,WB,WR,WQ,WK,BP,BN,BB,BR,BQ,BK);
     }
 }
