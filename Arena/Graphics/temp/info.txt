@@ -1,0 +1,5 @@
+This is the directory for Arena's temporary graphics-files.
+
+
+Dies ist das Verzeichnis für Arenas temporären Grafik-Dateien.
+

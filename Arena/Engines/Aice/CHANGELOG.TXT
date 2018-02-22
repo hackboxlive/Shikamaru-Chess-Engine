@@ -1,0 +1,162 @@
+AICE 0.99.2
+- In this version Christos Boussios offered great help in evaluation.
+- Fixed a bug with search starting depth that caused AICE to blunder
+  very offten.
+- Fixed a bug in nullmove pruning.
+
+AICE 0.98
+- Hash table replacement scheme is the simple 'replace always'.
+- Recursive history based reductions added again (now I think they work for me 
+  after the bug fixes in my search).
+- Improved (?) evaluation and fixes.
+- Fixed a bug in displaying current move number in UCI.
+- Fixed a bug in infinite search in UCI.
+
+AICE 0.97
+- FHR removed completely from the search.
+- Some evaluation features (=bugs) removed/tuned.
+
+AICE 0.96
+- I am not using aspiration search at root anymore.
+- Fixed the bug in sending castling moves to GUI in UCI. 
+- Fixed a bug with 50th move rule and mates in 50th move.
+- Default point of view for scores set to 'Engine'.
+- King safety scores tuned (I hope). 
+
+AICE 0.95
+- UCI FRC extensions implemented.
+- FRC castling bugs fixed, better support for Arena.
+- Improved PGN reading, handles FRC games also.
+- Fixed a bug in pondering (ignored ponder hits).
+- Fixed a bug related with draw offers and pondering (time looses).
+- Evaluation rewritten.
+- Fixed some bugs in search.
+- Changed the way that fail highs handled in root.
+
+AICE 0.93
+- Minor evaluation changes and tuning.
+- Modified the hash-replacement scheme.
+- Tuned FHR.
+- Added non-recursive reduction based on eval and history data.
+
+AICE 0.92
+- Fixed the bug with 'isready' command in UCI.
+- Fixed a bug in opening book creation. New format.
+- FHR disabled in the last 3-plies if a nullmove search indicates a threat.
+- Fixed a bug in FRC move generation (castle).
+- 64bit node counters.
+
+AICE 0.91.1
+- Bugfix version. Ignore 0.91 completely.
+
+AICE 0.91
+- Fixed a bug when retrieving pv moves from hash.
+
+AICE 0.90
+- New feature: FRC (Chess960)
+- New feature: analyze (xboard)
+- New feature: pondering (xboard)
+- New INI option: Pondering, with values GUI, Never, Always
+- AICE now understands non-standard PGN (like 1.e4)
+- AICE now understands PGN games starting from a FEN position.
+- New syntax for book creation functions.
+- Fixed a bug in winning pawn endgames evaluation.
+- Fixed a bug in passed pawns evaluation.
+- Fixed bugs in evaluation (assymetries).
+- Removed search instability caused by FHR.
+- Added new endgame knowledge for KQKR and KRKB(N).
+- Fixed a bug related with movestogo in time management under UCI.
+
+AICE version 0.86.1
+- Fixed the bug in time management under UCI.
+
+AICE version 0.86
+- Safer FHR.
+- Root move ordering changed to include killer moves.
+- Better time management (easy moves).
+- AICE now understands the N moves in X mins time control.
+- New evaluation term: pawn islands
+- AICE will not resign if it plays a checking move.
+- Book command (bk) implemented (xboard protocol).
+
+AICE version 0.85
+- New setting ResignValue
+- Fixed the bug in PV display (WB)
+- Added current root move info (UCI)
+- Fixed a bug with check extensions.
+- Fixed a bug in hash tables (was a possible crash)
+- Fixed another bug in SEE (thanks to valgrind).
+- Fixed a bug in piece-square tables initialization (thanks to valgrind).
+- Fixed bugs related to unitialized variables (thanks to valgrind).
+- Fixed a bug in opening book creation.
+
+AICE version 0.84
+- Bug fix in king safety evaluation.
+- Bug fix in SEE code.
+
+AICE version 0.83
+- Bug fix in root search/time management. 
+- Bug fix in extensions - AICE extended too much.
+- Bug fix in 'Normal' book usage, added a % margin for second "best" moves.
+- Added 'point of view' setting for displaying evaluations from white/engine's pov.
+Thanks to Guenther Simon for pointing the missing of these features.
+
+AICE version 0.82
+- Bug fix in FHR.
+- Better time allocation.
+- Bug fix in endgame evaluation.
+- IID is back and working now.
+- Deep mates are back and limited to first ply in search only.
+- Bug fix in a mate scanner caused incorrect evaluations.
+- Bug fix in 'Random' setting in opening book (was crash).
+
+AICE version 0.81
+- Search reductions disabled.
+- Bug fix in incremental time control.
+- Removed unused knowledge from the evaluation function.
+- Fixed a bug in KNN vs K(P) endgame recognizer.
+
+AICE version 0.80
+- Fixed a bug in opening book building.
+- Fixed a bug in fractional extensions.
+- Fixed a bug in q-hash table that caused AICE to crash (UCI).
+- FHR are not tried after or during a null move search.
+- Null move search is not done in PV nodes.
+- Root moves are now sorted by number of nodes in prev iteration. Hash move first.
+- TT probes/stores disabled at leaf nodes.
+- Added search reductions when a node seems that it will fail low.
+- New opening book. Removed Sicilian Dragon - King's Indian - Grunfeld.
+- Removed the aspiration window parameter. AICE uses a fixed 0.5 pawn value.
+- Better time management.
+- 'Book' parameter in UCI disabled.
+
+AICE version 0.74
+- Fixed a bug in my FHR implementation. Safer now.
+- FHR are not tried if null move returns a mate threat.
+- Evaluation rewritted, now I am using centipawns again.
+- Introduced some kind of lazy evaluation of king safety in the last plies of main search and in QS.
+- Fixed a bug in aspiration search that caused AICE to stuck in an iteration.
+- Fixed a bug in passed pawn evaluation.
+- Uses fractional ply extensions now.
+
+AICE version 0.73.1
+- Null move is not tried if one side had less than 5 legal moves in previous ply.
+- Changed the margins for FHR, somewhat safer now.
+- IID is disabled because something is buggy.
+
+AICE version 0.73
+- Fixed a bug in 'time per move' level control.
+- Fail High Reductions (FHR).
+- Reduction-1 as described by Ed Schröder is disabled (because of FHR).
+- Root search rewritted.
+- Hash table store scheme modified a bit.
+
+AICE version 0.72.4
+- Some code cleanups
+- Evaluation function tuning
+- Changed some oppening book lines that AICE doesn't like.
+- New compile for Windows version using Microsoft Visual C++ Toolkit 2003 
+
+AICE version 0.72.3
+- K+B vs K+P recognizer bug fixed.
+- Time management changed to handle fail lows.

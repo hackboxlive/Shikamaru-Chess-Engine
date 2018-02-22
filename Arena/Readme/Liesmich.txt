@@ -1,0 +1,33 @@
+Dies ist die Version 1.1 von Arena für Linux, der freien Schachoberfläche!
+--------------------------------------------------------------------------
+
+http://www.playwitharena.com
+
+Versionshistorie:
+----------------------------
+
+Arena 1.1 für Linux, 2017-01-27
+  * Turnierbugs entfernt
+  * Mausrad deaktiviert in Turieren
+  * Turnier im Browser öfffnen funktioniert auch aus dem Turnierdialog heraus
+  * Freier RAM Anzeige jetzt von /proc/meminfo statt von SysInfo
+  * Wertungszahl-Berechnung: "Zusammenfassen" und "Dateien kopieren nach.." funktioniert jetzt
+  * Wertungszahl-Berechnung: Ordo arbeitet jetzt zurätzlich im ELOStat-Modus
+  * Wertungszahl-Berechnung: Sie können jetzt die Wertungszahlen-Ergebnisse in Arena importieren
+  * Doppelkicken auf Tablebase-Züge funktionierte in der deutschen Sprache nicht immer
+  * Viele andere Fehler beseitigt
+  * Bessere Unterstützung von dunklen Themen
+  * Kleinere Verbesserungen in vielen Bereichen
+
+Arena 1.0 für Linux, 2016-11-12
+  * Erstes öffentliches Release der Linux Version
+  * Unterschiede zur Windows Version
+    * Bessere Integration in Ihren Linux-Desktop als die Wine-Version
+    * Kann alle Motoren-Typen ausführen: Linux, und Windows (wenn Wine installiert ist)
+    * Komplett UTF-8
+    * Verwendet Ordo für die Berechnung von Wertungszahlen
+    * Bislang kein Citrine, Autoplayer, ICS oder Drucken verfügbar
+  * Klänge via externen Kommandozeilen-Abspieler (mpg123, music123 oder music321) möglich
+
+Wenn Sie eine Übersetzung erstellen möchten, wenden Sie sich über das 
+Supportformular an das Arena-Team.
