@@ -14,7 +14,7 @@ public class UserInterface extends JPanel {
     static int rating=0;
     static int border=10;//the amount of empty space around the frame
     static double squareSize=64;//the size of a chess board square
-    static JFrame javaF=new JFrame("Orion Chess Engine created by LogicCrazy");//must be declared as static so that other class' can repaint
+    static JFrame javaF=new JFrame("Shikamaru Chess Engine created by Shakti");//must be declared as static so that other class' can repaint
     static UserInterface javaUI=new UserInterface();//must be declared as static so that other class' can repaint
     public static void main(String[] args) {
         UCI.uciCommunication();
@@ -108,3 +108,8 @@ public class UserInterface extends JPanel {
         EP=0;
     }
 }
+
+//how to make jar
+//Compile them all: javac *.java
+//make mainclass.txt with only one line telling the start of the program
+//make jar: jar cmf mainclass.txt shikamaru.jar *.class
