@@ -22,20 +22,17 @@ public class UserInterface extends JPanel {
         javaF.setSize(757, 570);
         javaF.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width-javaF.getWidth())/2,
                 (Toolkit.getDefaultToolkit().getScreenSize().height-javaF.getHeight())/2);
-        //javaF.setVisible(true);
+        javaF.setVisible(true);
         //newGame();
-        BoardGeneration.importFEN("r3k2r/p1pNqpb1/bn2pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1");
+        BoardGeneration.importFEN("3k4/3p4/8/K1P4r/8/8/8/8 b - - 0 1");
         //BoardGeneration.initiateStandardChess();
         BoardGeneration.drawArray(WP,WN,WB,WR,WQ,WK,BP,BN,BB,BR,BQ,BK);
+        long startTime=System.currentTimeMillis();
         Perft.perftRoot(WP,WN,WB,WR,WQ,WK,BP,BN,BB,BR,BQ,BK,EP,CWK,CWQ,CBK,CBQ,WhiteToMove,0);
-        if (Perft.perftTotalMoveCounter==0) {
-            if (WhiteToMove) {
-                Perft.perftTotalMoveCounter=Moves.possibleMovesW(WP,WN,WB,WR,WQ,WK,BP,BN,BB,BR,BQ,BK,EP,CWK,CWQ,CBK,CBQ).length()/4;
-            } else {
-                Perft.perftTotalMoveCounter=Moves.possibleMovesB(WP,WN,WB,WR,WQ,WK,BP,BN,BB,BR,BQ,BK,EP,CWK,CWQ,CBK,CBQ).length()/4;
-            }
-        }
-        System.out.print("Total: "+Perft.perftTotalMoveCounter);
+        long endTime=System.currentTimeMillis();
+        System.out.println("Nodes: "+Perft.perftTotalMoveCounter);
+        System.out.println("That took "+(endTime-startTime)+" milliseconds");
+        System.out.println("Nodes Per Second: "+(int)(Perft.perftTotalMoveCounter/((endTime-startTime)/1000.0)));
         javaF.repaint();
     }
     @Override
