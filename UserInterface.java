@@ -17,6 +17,9 @@ public class UserInterface extends JPanel {
     static JFrame javaF=new JFrame("Orion Chess Engine created by LogicCrazy");//must be declared as static so that other class' can repaint
     static UserInterface javaUI=new UserInterface();//must be declared as static so that other class' can repaint
     public static void main(String[] args) {
+        UCI.uciCommunication();
+
+        //below is shit!
         javaF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         javaF.add(javaUI);
         javaF.setSize(757, 570);
