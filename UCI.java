@@ -2,9 +2,9 @@ import java.util.*;
 public class UCI {
     static String ENGINENAME="Orion v1";
     public static void uciCommunication() {
+        Scanner input = new Scanner(System.in);
         while (true)
         {
-            Scanner input = new Scanner(System.in);
             String inputString=input.nextLine();
             if ("uci".equals(inputString))
             {
@@ -29,6 +29,10 @@ public class UCI {
             else if (inputString.startsWith("go"))
             {
                 inputGo();
+            }
+            else if (inputString.equals("quit"))
+            {
+                inputQuit();
             }
             else if ("print".equals(inputString))
             {
@@ -84,14 +88,38 @@ public class UCI {
             move=Moves.possibleMovesB(UserInterface.WP,UserInterface.WN,UserInterface.WB,UserInterface.WR,UserInterface.WQ,UserInterface.WK,UserInterface.BP,UserInterface.BN,UserInterface.BB,UserInterface.BR,UserInterface.BQ,UserInterface.BK,UserInterface.EP,UserInterface.CWK,UserInterface.CWQ,UserInterface.CBK,UserInterface.CBQ);
         }
         int index=(int)(Math.floor(Math.random()*(move.length()/4))*4);
-        System.out.println(moveToAlgebra(move.substring(index,index+4)));
+        System.out.println("bestmove "+moveToAlgebra(move.substring(index,index+4)));
     }
     public static String moveToAlgebra(String move) {
+        String append="";
+        int start=0,end=0;
+        if (Character.isDigit(move.charAt(3))) {//'regular' move
+            start=(Character.getNumericValue(move.charAt(0))*8)+(Character.getNumericValue(move.charAt(1)));
+            end=(Character.getNumericValue(move.charAt(2))*8)+(Character.getNumericValue(move.charAt(3)));
+        } else if (move.charAt(3)=='P') {//pawn promotion
+            if (Character.isUpperCase(move.charAt(2))) {
+                start=Long.numberOfTrailingZeros(Moves.FileMasks8[move.charAt(0)-'0']&Moves.RankMasks8[1]);
+                end=Long.numberOfTrailingZeros(Moves.FileMasks8[move.charAt(1)-'0']&Moves.RankMasks8[0]);
+            } else {
+                start=Long.numberOfTrailingZeros(Moves.FileMasks8[move.charAt(0)-'0']&Moves.RankMasks8[6]);
+                end=Long.numberOfTrailingZeros(Moves.FileMasks8[move.charAt(1)-'0']&Moves.RankMasks8[7]);
+            }
+            append=""+Character.toLowerCase(move.charAt(2));
+        } else if (move.charAt(3)=='E') {//en passant
+            if (move.charAt(2)=='W') {
+                start=Long.numberOfTrailingZeros(Moves.FileMasks8[move.charAt(0)-'0']&Moves.RankMasks8[3]);
+                end=Long.numberOfTrailingZeros(Moves.FileMasks8[move.charAt(1)-'0']&Moves.RankMasks8[2]);
+            } else {
+                start=Long.numberOfTrailingZeros(Moves.FileMasks8[move.charAt(0)-'0']&Moves.RankMasks8[4]);
+                end=Long.numberOfTrailingZeros(Moves.FileMasks8[move.charAt(1)-'0']&Moves.RankMasks8[5]);
+            }
+        }
         String returnMove="";
-        returnMove+=(char)('a'+move.charAt(1)-'0');
-        returnMove+=(char)('8'-(move.charAt(0)-'0'));
-        returnMove+=(char)('a'+move.charAt(3)-'0');
-        returnMove+=(char)('8'-(move.charAt(2)-'0'));
+        returnMove+=(char)('a'+(start%8));
+        returnMove+=(char)('8'-(start/8));
+        returnMove+=(char)('a'+(end%8));
+        returnMove+=(char)('8'-(end/8));
+        returnMove+=append;
         return returnMove;
     }
     public static void algebraToMove(String input,String moves) {
@@ -150,6 +178,9 @@ public class UCI {
                 }
             }
         }
+    }
+    public static void inputQuit() {
+        System.exit(0);
     }
     public static void inputPrint() {
         BoardGeneration.drawArray(UserInterface.WP,UserInterface.WN,UserInterface.WB,UserInterface.WR,UserInterface.WQ,UserInterface.WK,UserInterface.BP,UserInterface.BN,UserInterface.BB,UserInterface.BR,UserInterface.BQ,UserInterface.BK);
