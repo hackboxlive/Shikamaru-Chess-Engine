@@ -91,41 +91,41 @@ public class BoardGeneration {
     }
     public static void importFEN(String fenString) {
         //not chess960 compatible
-	UserInterface.WP=0; UserInterface.WN=0; UserInterface.WB=0;
-        UserInterface.WR=0; UserInterface.WQ=0; UserInterface.WK=0;
-        UserInterface.BP=0; UserInterface.BN=0; UserInterface.BB=0;
-        UserInterface.BR=0; UserInterface.BQ=0; UserInterface.BK=0;
-        UserInterface.CWK=false; UserInterface.CWQ=false;
-        UserInterface.CBK=false; UserInterface.CBQ=false;
+	Shikamaru.WP=0; Shikamaru.WN=0; Shikamaru.WB=0;
+        Shikamaru.WR=0; Shikamaru.WQ=0; Shikamaru.WK=0;
+        Shikamaru.BP=0; Shikamaru.BN=0; Shikamaru.BB=0;
+        Shikamaru.BR=0; Shikamaru.BQ=0; Shikamaru.BK=0;
+        Shikamaru.CWK=false; Shikamaru.CWQ=false;
+        Shikamaru.CBK=false; Shikamaru.CBQ=false;
 	int charIndex = 0;
 	int boardIndex = 0;
 	while (fenString.charAt(charIndex) != ' ')
 	{
 		switch (fenString.charAt(charIndex++))
 		{
-		case 'P': UserInterface.WP |= (1L << boardIndex++);
+		case 'P': Shikamaru.WP |= (1L << boardIndex++);
 			break;
-		case 'p': UserInterface.BP |= (1L << boardIndex++);
+		case 'p': Shikamaru.BP |= (1L << boardIndex++);
 			break;
-		case 'N': UserInterface.WN |= (1L << boardIndex++);
+		case 'N': Shikamaru.WN |= (1L << boardIndex++);
 			break;
-		case 'n': UserInterface.BN |= (1L << boardIndex++);
+		case 'n': Shikamaru.BN |= (1L << boardIndex++);
 			break;
-		case 'B': UserInterface.WB |= (1L << boardIndex++);
+		case 'B': Shikamaru.WB |= (1L << boardIndex++);
 			break;
-		case 'b': UserInterface.BB |= (1L << boardIndex++);
+		case 'b': Shikamaru.BB |= (1L << boardIndex++);
 			break;
-		case 'R': UserInterface.WR |= (1L << boardIndex++);
+		case 'R': Shikamaru.WR |= (1L << boardIndex++);
 			break;
-		case 'r': UserInterface.BR |= (1L << boardIndex++);
+		case 'r': Shikamaru.BR |= (1L << boardIndex++);
 			break;
-		case 'Q': UserInterface.WQ |= (1L << boardIndex++);
+		case 'Q': Shikamaru.WQ |= (1L << boardIndex++);
 			break;
-		case 'q': UserInterface.BQ |= (1L << boardIndex++);
+		case 'q': Shikamaru.BQ |= (1L << boardIndex++);
 			break;
-		case 'K': UserInterface.WK |= (1L << boardIndex++);
+		case 'K': Shikamaru.WK |= (1L << boardIndex++);
 			break;
-		case 'k': UserInterface.BK |= (1L << boardIndex++);
+		case 'k': Shikamaru.BK |= (1L << boardIndex++);
 			break;
 		case '/':
 			break;
@@ -149,7 +149,7 @@ public class BoardGeneration {
 			break;
 		}
 	}
-	UserInterface.WhiteToMove = (fenString.charAt(++charIndex) == 'w');
+	Shikamaru.WhiteToMove = (fenString.charAt(++charIndex) == 'w');
 	charIndex += 2;
 	while (fenString.charAt(charIndex) != ' ')
 	{
@@ -157,13 +157,13 @@ public class BoardGeneration {
 		{
 		case '-':
 			break;
-		case 'K': UserInterface.CWK = true;
+		case 'K': Shikamaru.CWK = true;
 			break;
-		case 'Q': UserInterface.CWQ = true;
+		case 'Q': Shikamaru.CWQ = true;
 			break;
-		case 'k': UserInterface.CBK = true;
+		case 'k': Shikamaru.CBK = true;
 			break;
-		case 'q': UserInterface.CBQ = true;
+		case 'q': Shikamaru.CBQ = true;
 			break;
 		default:
 			break;
@@ -171,7 +171,7 @@ public class BoardGeneration {
 	}
 	if (fenString.charAt(++charIndex) != '-')
 	{
-		UserInterface.EP = Moves.FileMasks8[fenString.charAt(charIndex++) - 'a'];
+		Shikamaru.EP = Moves.FileMasks8[fenString.charAt(charIndex++) - 'a'];
 	}
 	//the rest of the fenString is not yet utilized
     }
@@ -208,10 +208,10 @@ public class BoardGeneration {
             }
         }
         drawArray(WP,WN,WB,WR,WQ,WK,BP,BN,BB,BR,BQ,BK);
-        UserInterface.WP=WP; UserInterface.WN=WN; UserInterface.WB=WB;
-        UserInterface.WR=WR; UserInterface.WQ=WQ; UserInterface.WK=WK;
-        UserInterface.BP=BP; UserInterface.BN=BN; UserInterface.BB=BB;
-        UserInterface.BR=BR; UserInterface.BQ=BQ; UserInterface.BK=BK;
+        Shikamaru.WP=WP; Shikamaru.WN=WN; Shikamaru.WB=WB;
+        Shikamaru.WR=WR; Shikamaru.WQ=WQ; Shikamaru.WK=WK;
+        Shikamaru.BP=BP; Shikamaru.BN=BN; Shikamaru.BB=BB;
+        Shikamaru.BR=BR; Shikamaru.BQ=BQ; Shikamaru.BK=BK;
     }
     public static long convertStringToBitboard(String Binary) {
         if (Binary.charAt(0)=='0') {//not going to be a negative number

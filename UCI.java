@@ -70,10 +70,10 @@ public class UCI {
             while (input.length()>0)
             {
                 String moves;
-                if (UserInterface.WhiteToMove) {
-                    moves=Moves.possibleMovesW(UserInterface.WP,UserInterface.WN,UserInterface.WB,UserInterface.WR,UserInterface.WQ,UserInterface.WK,UserInterface.BP,UserInterface.BN,UserInterface.BB,UserInterface.BR,UserInterface.BQ,UserInterface.BK,UserInterface.EP,UserInterface.CWK,UserInterface.CWQ,UserInterface.CBK,UserInterface.CBQ);
+                if (Shikamaru.WhiteToMove) {
+                    moves=Moves.possibleMovesW(Shikamaru.WP,Shikamaru.WN,Shikamaru.WB,Shikamaru.WR,Shikamaru.WQ,Shikamaru.WK,Shikamaru.BP,Shikamaru.BN,Shikamaru.BB,Shikamaru.BR,Shikamaru.BQ,Shikamaru.BK,Shikamaru.EP,Shikamaru.CWK,Shikamaru.CWQ,Shikamaru.CBK,Shikamaru.CBQ);
                 } else {
-                    moves=Moves.possibleMovesB(UserInterface.WP,UserInterface.WN,UserInterface.WB,UserInterface.WR,UserInterface.WQ,UserInterface.WK,UserInterface.BP,UserInterface.BN,UserInterface.BB,UserInterface.BR,UserInterface.BQ,UserInterface.BK,UserInterface.EP,UserInterface.CWK,UserInterface.CWQ,UserInterface.CBK,UserInterface.CBQ);
+                    moves=Moves.possibleMovesB(Shikamaru.WP,Shikamaru.WN,Shikamaru.WB,Shikamaru.WR,Shikamaru.WQ,Shikamaru.WK,Shikamaru.BP,Shikamaru.BN,Shikamaru.BB,Shikamaru.BR,Shikamaru.BQ,Shikamaru.BK,Shikamaru.EP,Shikamaru.CWK,Shikamaru.CWQ,Shikamaru.CBK,Shikamaru.CBQ);
                 }
                 algebraToMove(input,moves);
                 input=input.substring(input.indexOf(' ')+1);
@@ -82,10 +82,10 @@ public class UCI {
     }
     public static void inputGo() {
         String move;
-        if (UserInterface.WhiteToMove) {
-            move=Moves.possibleMovesW(UserInterface.WP,UserInterface.WN,UserInterface.WB,UserInterface.WR,UserInterface.WQ,UserInterface.WK,UserInterface.BP,UserInterface.BN,UserInterface.BB,UserInterface.BR,UserInterface.BQ,UserInterface.BK,UserInterface.EP,UserInterface.CWK,UserInterface.CWQ,UserInterface.CBK,UserInterface.CBQ);
+        if (Shikamaru.WhiteToMove) {
+            move=Moves.possibleMovesW(Shikamaru.WP,Shikamaru.WN,Shikamaru.WB,Shikamaru.WR,Shikamaru.WQ,Shikamaru.WK,Shikamaru.BP,Shikamaru.BN,Shikamaru.BB,Shikamaru.BR,Shikamaru.BQ,Shikamaru.BK,Shikamaru.EP,Shikamaru.CWK,Shikamaru.CWQ,Shikamaru.CBK,Shikamaru.CBQ);
         } else {
-            move=Moves.possibleMovesB(UserInterface.WP,UserInterface.WN,UserInterface.WB,UserInterface.WR,UserInterface.WQ,UserInterface.WK,UserInterface.BP,UserInterface.BN,UserInterface.BB,UserInterface.BR,UserInterface.BQ,UserInterface.BK,UserInterface.EP,UserInterface.CWK,UserInterface.CWQ,UserInterface.CBK,UserInterface.CBQ);
+            move=Moves.possibleMovesB(Shikamaru.WP,Shikamaru.WN,Shikamaru.WB,Shikamaru.WR,Shikamaru.WQ,Shikamaru.WK,Shikamaru.BP,Shikamaru.BN,Shikamaru.BB,Shikamaru.BR,Shikamaru.BQ,Shikamaru.BK,Shikamaru.EP,Shikamaru.CWK,Shikamaru.CWQ,Shikamaru.CBK,Shikamaru.CBQ);
         }
         int index=(int)(Math.floor(Math.random()*(move.length()/4))*4);
         System.out.println("bestmove "+moveToAlgebra(move.substring(index,index+4)));
@@ -151,29 +151,29 @@ public class UCI {
                 if ((input.charAt(4)==' ') || (Character.toUpperCase(input.charAt(4))==Character.toUpperCase(moves.charAt(i+2)))) {
                     if (Character.isDigit(moves.charAt(i+3))) {//'regular' move
                         start=(Character.getNumericValue(moves.charAt(i))*8)+(Character.getNumericValue(moves.charAt(i+1)));
-                        if (((1L<<start)&UserInterface.WK)!=0) {UserInterface.CWK=false; UserInterface.CWQ=false;}
-                        else if (((1L<<start)&UserInterface.BK)!=0) {UserInterface.CBK=false; UserInterface.CBQ=false;}
-                        else if (((1L<<start)&UserInterface.WR&(1L<<63))!=0) {UserInterface.CWK=false;}
-                        else if (((1L<<start)&UserInterface.WR&(1L<<56))!=0) {UserInterface.CWQ=false;}
-                        else if (((1L<<start)&UserInterface.BR&(1L<<7))!=0) {UserInterface.CBK=false;}
-                        else if (((1L<<start)&UserInterface.BR&1L)!=0) {UserInterface.CBQ=false;}
+                        if (((1L<<start)&Shikamaru.WK)!=0) {Shikamaru.CWK=false; Shikamaru.CWQ=false;}
+                        else if (((1L<<start)&Shikamaru.BK)!=0) {Shikamaru.CBK=false; Shikamaru.CBQ=false;}
+                        else if (((1L<<start)&Shikamaru.WR&(1L<<63))!=0) {Shikamaru.CWK=false;}
+                        else if (((1L<<start)&Shikamaru.WR&(1L<<56))!=0) {Shikamaru.CWQ=false;}
+                        else if (((1L<<start)&Shikamaru.BR&(1L<<7))!=0) {Shikamaru.CBK=false;}
+                        else if (((1L<<start)&Shikamaru.BR&1L)!=0) {Shikamaru.CBQ=false;}
                     }
-                    UserInterface.EP=Moves.makeMoveEP(UserInterface.WP|UserInterface.BP,moves.substring(i,i+4));
-                    UserInterface.WR=Moves.makeMoveCastle(UserInterface.WR, UserInterface.WK|UserInterface.BK, moves.substring(i,i+4), 'R');
-                    UserInterface.BR=Moves.makeMoveCastle(UserInterface.BR, UserInterface.WK|UserInterface.BK, moves.substring(i,i+4), 'r');
-                    UserInterface.WP=Moves.makeMove(UserInterface.WP, moves.substring(i,i+4), 'P');
-                    UserInterface.WN=Moves.makeMove(UserInterface.WN, moves.substring(i,i+4), 'N');
-                    UserInterface.WB=Moves.makeMove(UserInterface.WB, moves.substring(i,i+4), 'B');
-                    UserInterface.WR=Moves.makeMove(UserInterface.WR, moves.substring(i,i+4), 'R');
-                    UserInterface.WQ=Moves.makeMove(UserInterface.WQ, moves.substring(i,i+4), 'Q');
-                    UserInterface.WK=Moves.makeMove(UserInterface.WK, moves.substring(i,i+4), 'K');
-                    UserInterface.BP=Moves.makeMove(UserInterface.BP, moves.substring(i,i+4), 'p');
-                    UserInterface.BN=Moves.makeMove(UserInterface.BN, moves.substring(i,i+4), 'n');
-                    UserInterface.BB=Moves.makeMove(UserInterface.BB, moves.substring(i,i+4), 'b');
-                    UserInterface.BR=Moves.makeMove(UserInterface.BR, moves.substring(i,i+4), 'r');
-                    UserInterface.BQ=Moves.makeMove(UserInterface.BQ, moves.substring(i,i+4), 'q');
-                    UserInterface.BK=Moves.makeMove(UserInterface.BK, moves.substring(i,i+4), 'k');
-                    UserInterface.WhiteToMove=!UserInterface.WhiteToMove;
+                    Shikamaru.EP=Moves.makeMoveEP(Shikamaru.WP|Shikamaru.BP,moves.substring(i,i+4));
+                    Shikamaru.WR=Moves.makeMoveCastle(Shikamaru.WR, Shikamaru.WK|Shikamaru.BK, moves.substring(i,i+4), 'R');
+                    Shikamaru.BR=Moves.makeMoveCastle(Shikamaru.BR, Shikamaru.WK|Shikamaru.BK, moves.substring(i,i+4), 'r');
+                    Shikamaru.WP=Moves.makeMove(Shikamaru.WP, moves.substring(i,i+4), 'P');
+                    Shikamaru.WN=Moves.makeMove(Shikamaru.WN, moves.substring(i,i+4), 'N');
+                    Shikamaru.WB=Moves.makeMove(Shikamaru.WB, moves.substring(i,i+4), 'B');
+                    Shikamaru.WR=Moves.makeMove(Shikamaru.WR, moves.substring(i,i+4), 'R');
+                    Shikamaru.WQ=Moves.makeMove(Shikamaru.WQ, moves.substring(i,i+4), 'Q');
+                    Shikamaru.WK=Moves.makeMove(Shikamaru.WK, moves.substring(i,i+4), 'K');
+                    Shikamaru.BP=Moves.makeMove(Shikamaru.BP, moves.substring(i,i+4), 'p');
+                    Shikamaru.BN=Moves.makeMove(Shikamaru.BN, moves.substring(i,i+4), 'n');
+                    Shikamaru.BB=Moves.makeMove(Shikamaru.BB, moves.substring(i,i+4), 'b');
+                    Shikamaru.BR=Moves.makeMove(Shikamaru.BR, moves.substring(i,i+4), 'r');
+                    Shikamaru.BQ=Moves.makeMove(Shikamaru.BQ, moves.substring(i,i+4), 'q');
+                    Shikamaru.BK=Moves.makeMove(Shikamaru.BK, moves.substring(i,i+4), 'k');
+                    Shikamaru.WhiteToMove=!Shikamaru.WhiteToMove;
                     break;
                 }
             }
@@ -183,6 +183,8 @@ public class UCI {
         System.exit(0);
     }
     public static void inputPrint() {
-        BoardGeneration.drawArray(UserInterface.WP,UserInterface.WN,UserInterface.WB,UserInterface.WR,UserInterface.WQ,UserInterface.WK,UserInterface.BP,UserInterface.BN,UserInterface.BB,UserInterface.BR,UserInterface.BQ,UserInterface.BK);
+        BoardGeneration.drawArray(Shikamaru.WP,Shikamaru.WN,Shikamaru.WB,Shikamaru.WR,Shikamaru.WQ,Shikamaru.WK,Shikamaru.BP,Shikamaru.BN,Shikamaru.BB,Shikamaru.BR,Shikamaru.BQ,Shikamaru.BK);
+        System.out.print("Zobrist Hash: ");
+        System.out.println(Zobrist.getZobristHash(Shikamaru.WP,Shikamaru.WN,Shikamaru.WB,Shikamaru.WR,Shikamaru.WQ,Shikamaru.WK,Shikamaru.BP,Shikamaru.BN,Shikamaru.BB,Shikamaru.BR,Shikamaru.BQ,Shikamaru.BK,Shikamaru.EP,Shikamaru.CWK,Shikamaru.CWQ,Shikamaru.CBK,Shikamaru.CBQ,Shikamaru.WhiteToMove));
     }
 }
